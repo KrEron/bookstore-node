@@ -3,11 +3,15 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const productRoutes = require("./api/routes/books");
 
-mongoose.connect("mongodb+srv://book:book@bookstore-mqznc.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
+
+mongoose.connect("mongodb+srv://book:"+process.env.MONGO_PASS+"@bookstore-mqznc.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
+app.use("/books", productRoutes);
+
 
 app.use((req,res,next)=>{
     const error = new Error("Not found.");
