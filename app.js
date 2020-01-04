@@ -11,9 +11,9 @@ mongoose.connect("mongodb+srv://book:"+process.env.MONGO_PASS+"@bookstore-mqznc.
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
+app.use("/uploads", express.static("uploads"));
 app.use("/books", bookRoutes);
 app.use("/orders", ordersRoutes);
-
 
 app.use((req,res,next)=>{
     const error = new Error("Not found.");
