@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require("multer");
 const Book = require("../models/book");
+const checkAuth = require("../middleware/check-auth")
 
 const storage = multer.diskStorage({
     destination: function(req,file,cb) {
@@ -28,7 +29,7 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.get("/", (req, res, next)=> {
+router.get("/", checkAuth, (req, res, next)=> {
     Book.find().exec()
     .then(docs=> {
         res.status(200).json(docs);
@@ -37,7 +38,7 @@ router.get("/", (req, res, next)=> {
     
 });
 
-router.post("/",upload.single("bookImg"), (req, res, next)=> {
+router.post("/", checkAuth, upload.single("bookImg"), (req, res, next)=> {
     console.log(req.file);
     const book = new Book({
         _id: new mongoose.Types.ObjectId(),
@@ -67,11 +68,13 @@ router.get("/:bookId", (req, res, next)=> {
     
 });
 
-router.patch("/:bookId", (req, res, next)=> {
+router.patch("/:bookId", checkAuth,upload.single("bookImg"), (req, res, next)=> {
     const id = req.params.bookId;
+    console.log(req.file);
     Book.update({_id:id}, { $set: {
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        bookImg: req.file.path
     }}).exec()
     .then(result=> {
         res.status(200).json({message: "Zmiana ksiazki o numerze " + id});
@@ -81,7 +84,7 @@ router.patch("/:bookId", (req, res, next)=> {
     
 });
 
-router.delete("/:bookId", (req, res, next)=> {
+router.delete("/:bookId", checkAuth, (req, res, next)=> {
     const id = req.params.bookId;
     Book.remove({_id: id}).exec()
     .then(result=> {

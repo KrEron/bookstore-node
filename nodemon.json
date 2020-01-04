@@ -1,5 +1,6 @@
 {
     "env": {
-        "MONGO_PASS": "book"
+        "MONGO_PASS": "book",
+        "JWT_KEY": "secret"
     }
 }

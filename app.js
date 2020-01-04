@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const bookRoutes = require("./api/routes/books");
 const ordersRoutes = require("./api/routes/orders");
-
+const userRoutes = require("./api/routes/users");
 
 mongoose.connect("mongodb+srv://book:"+process.env.MONGO_PASS+"@bookstore-mqznc.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
 app.use(bodyParser.urlencoded({extended:false}));
@@ -14,6 +14,7 @@ app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
 app.use("/books", bookRoutes);
 app.use("/orders", ordersRoutes);
+app.use("/users", userRoutes);
 
 app.use((req,res,next)=>{
     const error = new Error("Not found.");
