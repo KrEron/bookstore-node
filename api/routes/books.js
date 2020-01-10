@@ -50,7 +50,7 @@ router.post("/", checkAuth, upload.single("bookImg"), (req, res, next)=> {
     .then(result => {
         res.status(200).json({
             message: "Dodano nowa ksiazke",
-            createdProduct: book
+            createdBook: book
         });
     })
     .catch(err => res.status(500).json({error: err}));
